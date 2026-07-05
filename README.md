@@ -1,5 +1,7 @@
 # DeSU
 
+![DeSU logo](desu.png)
+
 **Dense Semantic Units (DSUs)** generator for compact, portable, reconstructive LLM context continuity.
 
 A DSU is a compact, self-contained natural-language representation of the **active semantic state** of an ongoing reasoning, conversational, or task process. It preserves enough future-relevant structure for a capable model to continue usefully without transporting the full history that produced that state.
