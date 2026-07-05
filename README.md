@@ -2,11 +2,11 @@
 
 ![DeSU logo](desu.svg)
 
-**Dense Semantic Units (DSUs)** generator for compact, portable, reconstructive LLM context continuity.
+**DeSU** is a prompt for generating **Dense Semantic Units (DSUs)** for compact, portable, reconstructive LLM context continuity.
 
 A DSU is a compact, self-contained natural-language representation of the **active semantic state** of an ongoing reasoning, conversational, or task process. It preserves enough future-relevant structure for a capable model to continue usefully without transporting the full history that produced that state.
 
-The project evolved from **IRGist**, an earlier semantic consolidation experiment. IRGist focused on producing a dense intermediate representation for transformer context reuse. DeSU generalizes the underlying idea: the central object is not a gist or compressed transcript, but a portable semantic checkpoint intended to support continued inference, reconstruction, correction, and evolution across sessions and model families.
+In this repository, DeSU is the prompt in `desu.txt`. A DSU is the artifact that prompt produces from input context.
 
 In compact form:
 
@@ -14,7 +14,7 @@ In compact form:
 DeSU(input context) -> DSU
 ```
 
-A DSU is the artifact. DeSU is the generator.
+A DSU is the artifact. DeSU is the prompt that generates it.
 
 ## Name
 
@@ -266,7 +266,7 @@ maximize future semantic utility
 subject to strong reduction
 ```
 
-The generator should jointly interpret the complete input rather than shorten fragments independently.
+The prompt should jointly interpret the complete input rather than shorten fragments independently.
 
 Source boundaries have no privileged status.
 
@@ -286,7 +286,7 @@ Aggressive token reduction targets may be used as prompt-level heuristics to dis
 
 ## Context-Only Envelope
 
-DeSU currently supports a minimal context-only serialization envelope inherited from IRGist:
+The prompt uses a minimal context-only serialization envelope:
 
 ```text
 type:context;protocol:context_only;content:<dense_semantic_record>
@@ -322,7 +322,7 @@ type:context;protocol:context_only;content:deployment requires prior approval
 
 The deployment restriction remains semantically active, but the DSU itself is not a new deployment request.
 
-The wrapper is currently stable, but it is not the definition of a DSU and should not be confused with the DeSU concept itself.
+The wrapper is stable in the prompt, but it is not the definition of a DSU and should not be confused with the DeSU concept itself.
 
 ## Example: Deduplication
 
@@ -422,11 +422,13 @@ Frequent regeneration may keep active state smaller and cleaner while reducing:
 
 This is an empirical hypothesis, not an established result.
 
-## Local-First Direction
+## Local-First Usage Direction
 
-The initial implementation goal is deliberately small, inspectable, and local-first.
+DeSU itself is the prompt in `desu.txt`.
 
-A minimal runtime should support operations such as:
+The surrounding usage model is deliberately small, inspectable, and local-first.
+
+Tooling around the prompt may support operations such as:
 
 ```text
 distill
@@ -538,7 +540,7 @@ A continuation can differ in wording while preserving functional state.
 
 ## Working Hypotheses
 
-DeSU currently motivates several testable hypotheses.
+DeSU motivates several testable hypotheses.
 
 ### 1. Useful state is much smaller than history
 
@@ -644,7 +646,7 @@ The project has partial conceptual connections to areas such as:
 
 DeSU should not be claimed as identical to any of them.
 
-It does not currently provide a mathematically canonical minimal encoding or a formal proof of sufficiency.
+It does not provide a mathematically canonical minimal encoding or a formal proof of sufficiency.
 
 Its distinctive practical combination is a compact, inspectable, aggressively lossy, future-inference-oriented, natural-language, model-conditioned, directly consumable, cross-session and cross-model portable checkpoint regenerated through live human-LLM interaction.
 
@@ -667,32 +669,16 @@ DeSU is not:
 - a requirement for recursive self-copy stability;
 - an instruction envelope for its consumer.
 
-## Project Evolution from IRGist
+## Terminology
 
-IRGist was the original project and remains the direct ancestor of DeSU.
-
-It established several ideas that remain important:
-
-- global semantic consolidation;
-- strong token reduction;
-- deduplication of equivalent meaning;
-- complementary merge;
-- reorganization across source boundaries;
-- preservation of critical negation and constraints;
-- model-dependent non-canonical output;
-- context-only consumption;
-- direct natural-language reuse by LLMs.
-
-The project later moved beyond the original framing.
-
-The current terminology is:
+The terminology used here is:
 
 ```text
 DSU
     the conceptual semantic-state artifact
 
 DeSU
-    the model-conditioned generator/distiller of DSUs
+    the prompt for distilling DSUs from active context
 
 distill
     produce a DSU from active context
@@ -705,22 +691,17 @@ portable semantic state
 
 frequent regeneration
     a lifecycle strategy
-
-IRGist
-    the legacy predecessor and original consolidation formulation
 ```
 
-The transition is conceptual, not merely cosmetic.
+This repository is `desu.txt`, the DeSU prompt, plus documentation for the DSU concept it describes.
 
-IRGist began by asking how to compress context into a dense reusable representation.
-
-DeSU asks a broader question:
+DeSU asks a practical question:
 
 > What is the smallest practical semantic state that still lets reconstructive human-model systems continue useful work?
 
 ## Status
 
-DeSU is an active research and engineering project.
+DeSU is an active research prompt and concept document.
 
 Preliminary practical observations suggest that capable models can often continue productively from aggressively compact semantic checkpoints, including across fresh sessions and different model families.
 
