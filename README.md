@@ -1,6 +1,6 @@
 # DeSU
 
-![DeSU logo](desu.png)
+![DeSU logo](desu.svg)
 
 **Dense Semantic Units (DSUs)** generator for compact, portable, reconstructive LLM context continuity.
 
