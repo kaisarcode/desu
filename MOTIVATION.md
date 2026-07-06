@@ -176,21 +176,56 @@ less stale, contradictory, or abandoned material influencing continuation
 
 Both matter to me.
 
-## Compaction Is Not Free
+## Compaction Is an Implementation Choice
 
-Repeated compaction can itself be costly.
+Compaction is a broad operation, not a single preservation policy.
 
-It takes inference time. It may require large models. It may repeatedly process material whose only value is historical. It may preserve trajectory that I do not need in active context.
+A compaction implementation may preserve trajectory, current state, task continuity, selected evidence, unresolved work, or another representation. It may also produce something close to a DSU.
 
-I wanted something simpler:
+My motivation is therefore not that compaction inherently drags history.
+
+My motivation is that I want an explicit target and a cheap path to a reusable artifact:
 
 ```text
 context -> prompt -> dense consequential state
 ```
 
-Not because every other mechanism is bad.
+I want the resulting checkpoint to be inspectable, portable, and usable outside the specific session mechanism that produced it.
 
-Because this is often enough for my problem.
+Other compaction systems may solve the same practical problem well.
+
+DeSU is the minimal mechanism I use because it is often enough for my environment.
+
+## I Want State I Can Carry
+
+A major practical reason I use DSUs is that the result is an explicit language artifact.
+
+I can carry it between:
+
+```text
+sessions
+models
+runtimes
+local and remote inference
+files
+prompts
+tools
+```
+
+The checkpoint is not tied, by definition, to a specific session database, context manager, vendor API, hidden state, graph backend, or retrieval service.
+
+That does not make interpretation model-independent. Different models may read the same DSU differently.
+
+The value is operational portability:
+
+```text
+generate once
+store as text
+inspect directly
+reuse elsewhere
+```
+
+For my local workflow, this matters as much as context reduction.
 
 ## One Prompt Is Part of the Point
 

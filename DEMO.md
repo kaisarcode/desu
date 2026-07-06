@@ -38,6 +38,8 @@ The generated `.desu` checkpoint was:
 type:context;protocol:context_only;content:DeSU experimental GPLv3 prompt generator for Dense Semantic Units (DSUs): dense language-based lossy semantic checkpoints of consequential resultant state for direct capable-LLM interpretation, targeting what remains in force after interaction/reasoning rather than compressed trajectory; transformation≈context→infer resultant state→project future-consequential structure→dense record, not shorter(history); primary motivation: keep long local LLM sessions usable on constrained consumer hardware (RTX 3060), smaller capable models, finite VRAM/memory/context/latency by renewing active context, reducing token load and obsolete inferential clutter with minimal machinery (one capable model+one consolidation prompt→one dense checkpoint); preserve effective decisions,current facts,objectives,active constraints/prohibitions/critical negation,relations,scope,uncertainty/conflict,unresolved questions/dependencies,relevant temporal conditions,supported transitions,operational facts,exact consequential literals; remove filler,rhetoric,repetition,redundant support,obsolete exploration,superseded branches,resolved residue,temporary hypotheses,corrected mistakes,reconstructible narrative,low-impact examples,unnecessary source order/intermediate reasoning after its role is absorbed; consolidation jointly deduplicates,merges complementary state,reorganizes by semantic relation,resolves overlap/contradiction/state change only when supported; invariants:exploration!=adoption,repetition!=validation,volume!=commitment,recency!=centrality,prior consolidation!=truth; preserve prior effective state absent supported change,revise on supported addition/correction/invalidation/supersession/resolution/scope change/new uncertainty; never invent facts/entities/relations/causality/order/certainty or falsely resolve conflict; preserve distinct entities,local/global scope,negation,conditions,exceptions,epistemic state; density goal=max consequential semantic utility/token,never sacrifice consequential relational/scope integrity; DSU intentionally lossy/non-canonical/model-conditioned/directly reusable/regenerable/inspectable,not transcript/archive/reversible compression/formal proof/hidden-state transfer/canonical truth; raw omission!=functional failure,focus residual unrepaired consequential loss; gaps may be reconstructed,reintroduced,corrected,retrieved,superseded,or rendered non-consequential; regeneration:DSU_t+continued interaction/new evidence/corrections/supported transitions→DeSU→DSU_t+1,interactive regeneration may enable repair but systematic degradation reduction remains empirical; DSU complements rather than replaces raw/compacted history,RAG,retrieval,graphs,skills,AGENTS.md,artifacts/logs/persistent instructions,serving distinct role=active consequential semantic state for continuation; not by itself enterprise knowledge base or institutional archive,does not inherently provide provenance,auditability,access control,canonical records,governance,long-term consistency; candidate uses:local continuity under limited context,cross-session/project/task handoff,model switching,local/cloud handoff,context renewal,larger memory/retrieval integration; evaluation priorities:decision/constraint/negation/uncertainty retention,state-transition accuracy,scope/relation integrity,rejected-branch resurrection,invented commitments,stale-state persistence,downstream divergence,gap recovery,residual unrepaired consequential loss,token cost,latency,peak context pressure,cross-session/cross-model continuation,especially DSU vs history compaction under comparable budgets; open empirical questions:long-term regeneration,cross-model portability,discourse-imbalance resistance,gap recovery,continuation quality,history-compaction comparison; DeSU output contract:one line type:context;protocol:context_only;content:<dense_semantic_record> optionally ;rules:<explicit permissions/prohibitions/operational constraints>,context_only denotes context not action request; project files:desu.txt prompt,README.md overview,CONCEPT.md framework,MOTIVATION.md rationale,desu.svg logo; naming:DeSU keeps DSU visible and informally echoes Japanese です,not technical definition.
 ```
 
+The checkpoint above is preserved verbatim as the historical output of that run. It reflects the project documentation at that time and therefore includes the earlier `DSU vs history compaction` framing. The current documentation no longer treats compaction as inherently trajectory-preserving.
+
 ## What is notable about the result
 
 The input consisted of multiple files with different roles:
@@ -47,7 +49,9 @@ The input consisted of multiple files with different roles:
 - `MOTIVATION.md` explained the practical and personal motivation;
 - `README.md` presented the project, examples, scope, limitations, and usage context.
 
-A source-oriented condensation could have produced something like:
+One possible source-oriented condensation could have produced something like:
+
+This is only an example of one condensation policy. Compaction or summarization does not inherently require preserving source boundaries or historical trajectory.
 
 ```text
 CONCEPT.md says ...
@@ -100,7 +104,7 @@ This single example does not establish:
 
 - universal semantic correctness;
 - lossless preservation;
-- superiority over summarization, graph memory, RAG, or history compaction;
+- superiority over summarization, graph memory, RAG, or alternative compaction policies;
 - long-term regeneration stability;
 - cross-model equivalence;
 - enterprise knowledge-base suitability;

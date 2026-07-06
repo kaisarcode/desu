@@ -71,25 +71,53 @@ type:context;protocol:context_only;content:state:E,constraint:X,dependency:Y unr
 
 The distinction is intentional.
 
-## DeSU and History Compaction
+## DeSU and Compaction
 
-DeSU is not a replacement for history compaction.
+DeSU is not defined in opposition to compaction.
 
-Both are lossy, but they optimize for different preservation targets.
+Compaction is a broad operation:
 
 ```text
-history compaction:
-history -> shorter representation of history
-
-DeSU:
-context -> consequential resultant state
+context -> smaller representation
 ```
 
-History compaction prioritizes continuity of trajectory.
+What the smaller representation preserves depends on the implementation.
 
-A DSU prioritizes continuity of what remains semantically in force.
+A compaction system may target:
 
-Raw history, compacted history, retrieval systems, artifacts, logs, and DSUs may coexist.
+* trajectory;
+* current state;
+* task continuity;
+* selected evidence;
+* unresolved work;
+* a handoff checkpoint;
+* another implementation-defined representation.
+
+It may also produce a DSU.
+
+DeSU is narrower and more explicit about its target:
+
+```text
+context
+-> consequential resultant state
+-> dense language-based DSU
+```
+
+Therefore:
+
+```text
+compaction = broad reduction operation
+DSU = specific representational target and portable artifact
+DeSU = one prompt-based DSU generator
+```
+
+The distinction is not that compaction must preserve history while a DSU preserves state.
+
+That depends on the compaction implementation.
+
+The distinction is that a DSU explicitly targets what remains consequentially in force and materializes it as a dense language-based checkpoint for direct reuse by capable LLMs.
+
+Raw history, compacted context, retrieval systems, artifacts, logs, and DSUs may coexist.
 
 ## What DeSU Preserves
 
@@ -382,6 +410,34 @@ A DSU does not require a mandatory specialized decoder or model-specific state-t
 
 This does not imply identical interpretation across models.
 
+## Portability and Agnosticism
+
+A DSU is an explicit language-based artifact.
+
+It can be stored, inspected, copied, versioned, passed between sessions, or supplied to another capable LLM context without requiring a mandatory vendor-specific memory service or hidden-state transfer mechanism.
+
+The intended property is format-level portability, not identical interpretation.
+
+```text
+DSU -> another session
+DSU -> another runtime
+DSU -> another capable model
+DSU -> local/cloud handoff
+DSU -> file or prompt context
+```
+
+A DSU does not inherently depend on:
+
+* a specific conversation database;
+* a specific agent runtime;
+* a specific model family;
+* a graph backend;
+* a retrieval backend;
+* a specialized decoder;
+* vendor-specific hidden state.
+
+This agnosticism is part of the practical value of materializing state explicitly in language.
+
 ## Model Dependence
 
 DeSU is executed by a model.
@@ -465,7 +521,7 @@ Questions around:
 * discourse-imbalance resistance;
 * gap recovery;
 * continuation quality;
-* comparison with history compaction;
+* comparison with alternative compaction and continuation-checkpoint policies;
 
 require further practical and controlled evaluation.
 

@@ -212,54 +212,77 @@ This leads to the central definition:
 
 ---
 
-## 5. DSU Is Not History Compaction
+## 5. DSU and Compaction Are Different Axes
 
-A DSU should not be defined as a better form of history compaction.
+A DSU should not be defined by opposition to compaction.
 
-History compaction and DSU consolidation solve different problems.
-
-### History compaction
+Compaction is a broad operation:
 
 ```text
-history -> shorter representation of history
+context -> smaller representation
 ```
 
-Its goal is generally to preserve enough of the trajectory to maintain historical continuity.
+The preservation target of that representation depends on the implementation.
 
-A compacted history may retain:
+A compaction system may preserve:
 
-* sequence;
-* major turns;
-* changes of direction;
-* rejected alternatives;
-* explanations;
-* important prior discussion.
+* trajectory;
+* current operational state;
+* task continuity;
+* selected evidence;
+* unresolved work;
+* a handoff-oriented checkpoint;
+* another implementation-defined projection.
 
-### DSU consolidation
+It may also produce a representation that is close to, compatible with, or explicitly intended to be a DSU.
+
+A DSU is narrower in a different sense: it specifies a representational target and artifact form.
 
 ```text
-history + reasoning + interaction -> consequential resultant state
+context
+-> infer resultant semantic state
+-> project future-consequential structure
+-> dense language-based checkpoint
 ```
 
-Its goal is to preserve what remains semantically in force.
+Its target is consequential resultant state.
 
-A DSU may discard almost the entire path if the path no longer affects continuation.
+Its artifact is a dense language-based representation designed for direct reuse by capable LLMs.
 
-The distinction is:
+Therefore:
 
-> **History compaction prioritizes continuity of trajectory. A DSU prioritizes continuity of consequential resultant state.**
+```text
+compaction = broad reduction operation
+DSU = specific representational target and artifact
+DeSU = one prompt-based policy for generating DSUs
+```
 
-Both are lossy.
+These categories are not mutually exclusive.
 
-The difference is not whether information is lost.
+For example:
 
-The difference is what each representation spends its limited budget preserving.
+```text
+context -> compaction implementation -> DSU
+context -> DeSU -> DSU
+context -> compaction implementation -> non-DSU checkpoint
+```
 
-This can be expressed as:
+The important distinction is not:
 
-> **Loss is unavoidable; preservation priorities are the design choice.**
+```text
+compaction preserves history
+DSU preserves state
+```
 
----
+That would incorrectly assign one preservation policy to all compaction implementations.
+
+The defensible distinction is:
+
+> **Compaction alone does not specify a preservation target. A DSU explicitly targets consequential resultant state and materializes it as a dense, portable language-based checkpoint.**
+
+Loss remains implementation-dependent.
+
+Preservation priorities remain a design choice.
 
 ## 6. DSU Does Not Replace History
 
@@ -431,11 +454,13 @@ A denser DSU is better only while consequential semantic structure remains intac
 
 ---
 
-## 9. State Consolidation Is Not Simple Summarization
+## 9. State Consolidation Is Not Merely Source Shortening
 
-A conventional history-oriented summary usually preserves a reduced account of source content or trajectory.
+A source-oriented or trajectory-oriented summary may preserve a reduced account of source content or historical evolution.
 
-A DSU instead targets the consequential resultant state inferred from the complete context.
+That is one possible summarization or compaction policy, not a necessary property of summarization or compaction in general.
+
+A DSU explicitly targets the consequential resultant state inferred from the complete context.
 
 This may require:
 
@@ -462,7 +487,9 @@ After testing, we decided to replace local HTTP transport with Unix domain socke
 SQLite remains unchanged.
 ```
 
-A history-oriented summary may preserve the evolution.
+A trajectory-oriented summary may preserve the evolution.
+
+A state-oriented compaction could omit it.
 
 A DSU may represent:
 
@@ -470,15 +497,11 @@ A DSU may represent:
 transport:Unix domain sockets;storage:SQLite
 ```
 
-The operation is therefore better described as:
+The defining point is therefore not that other compact representations must preserve history.
 
-> **semantic state consolidation**
+It is that a DSU makes its target explicit:
 
-rather than:
-
-> **history shortening**
-
----
+> **semantic consolidation toward consequential resultant state**
 
 ## 10. Exploration Is Not State
 
@@ -797,9 +820,7 @@ The relevant question is:
 
 A second important principle follows:
 
-> **History compaction and DSUs are both lossy; the practical question is which preservation target provides better continuation under the available context budget.**
-
----
+> **DSUs and other compact context representations should be compared by continuation behavior, preservation target, operational cost, and failure modes under comparable active-context budgets.**
 
 ## 18. Regeneration
 
@@ -1287,9 +1308,9 @@ More relevant measures include:
 * gap recovery;
 * residual unrepaired consequential loss;
 * token cost;
-* latency;
+* generation latency;
 * peak context pressure;
-* cross-session continuity;
+* portability across sessions and runtimes;
 * cross-model usability;
 * continuation quality over subsequent interaction.
 
@@ -1297,18 +1318,19 @@ A central evaluation question is:
 
 > **Can future inference continue correctly from the DSU without carrying the full inferential trajectory that produced it?**
 
-A particularly relevant comparison is:
+Relevant comparisons include:
 
 ```text
-history compaction vs DSU
+DSU vs trajectory-oriented compaction
+DSU vs state-oriented compaction
+DSU vs handoff summaries
+DSU vs implementation-specific continuation checkpoints
 under equal or comparable active-context budgets
 ```
 
-The objective is not to prove that one representation is universally superior.
+The objective is not to prove that DSUs are universally superior.
 
-The objective is to compare different preservation targets under realistic constraints.
-
----
+The objective is to compare explicit and implementation-defined preservation targets under realistic constraints, including the cost and portability of the resulting artifact.
 
 ## 28. Discourse-Imbalance Resistance
 
@@ -1425,16 +1447,16 @@ D(C(R)) = dense language-based representation
 DSU = D(C(R(T)))
 ```
 
-The important point is that the intended transformation is not:
-
-```text
-DSU = shorter(T)
-```
-
-It is closer to:
+The intended transformation is:
 
 ```text
 DSU = dense(consequential(resultant_state(T)))
+```
+
+It is not defined merely as arbitrary shortening:
+
+```text
+DSU != smaller(T) by definition alone
 ```
 
 `C` should not be interpreted as literal subset selection.
@@ -1451,9 +1473,9 @@ Consequential projection may involve:
 
 The constraint is that consequential semantic structure must not be invented or altered without support.
 
-This is the core conceptual separation from history compaction.
+This formal view specifies the DSU target.
 
----
+A generic compaction implementation may choose the same target, a partially overlapping target, or a different one.
 
 ## 32. Canonical Short Definition
 
@@ -1467,29 +1489,31 @@ This is the core conceptual separation from history compaction.
 
 ---
 
-## 34. One-Sentence Contrast
+## 34. One-Sentence Distinction
 
-> **History compaction preserves a reduced representation of the path; a DSU preserves a dense representation of what remains true, active, constrained, uncertain, unresolved, or otherwise consequential after the path.**
-
----
+> **Compaction is a broad reduction operation whose preservation target depends on implementation; a DSU is a dense, portable language-based checkpoint explicitly targeting consequential resultant state.**
 
 ## 35. Foundational Principles
 
 The framework can be reduced to the following principles:
 
 1. **Trajectory and resultant state are different objects.**
-2. **DSUs represent consequential resultant state, not compressed history.**
-3. **Both history compaction and DSUs are lossy; they optimize different preservation targets.**
-4. **Historical information may exist in parallel and be retrieved or compacted on demand.**
-5. **Information useful during inference may become unnecessary after producing state.**
-6. **Resultant-state consolidation may remove obsolete inferential residue from active context.**
-7. **Exploration is not adoption, repetition is not validation, volume is not commitment, and recency is not centrality.**
-8. **Previously consolidated state has persistence but not immunity from revision.**
-9. **Uncertainty, conflict, negation, limits, relations, and scope are part of state and must not be erased for density.**
-10. **Raw omission is not identical to functional failure.**
-11. **Gaps may be reconstructed, reintroduced, corrected, superseded, or rendered non-consequential by state evolution.**
-12. **The primary concern is residual unrepaired consequential loss.**
-13. **A DSU is a semantic checkpoint for continued inference, not an archive of how the checkpoint was reached.**
-14. **Density is subordinate to preservation of consequential semantic structure.**
-15. **A DSU is language-based and designed for direct interpretation by capable LLMs without requiring a mandatory model-specific decoding mechanism.**
-16. **The purpose of a DSU is to continue from where the system is without dragging the entire inferential baggage of how it got there.**
+2. **DSUs explicitly represent consequential resultant state.**
+3. **Compaction is implementation-defined and may preserve trajectory, state, task continuity, selected evidence, or another target.**
+4. **A compaction process may produce a DSU; the categories are not mutually exclusive.**
+5. **Historical information may exist in parallel and be retrieved or compacted on demand.**
+6. **Information useful during inference may become unnecessary after producing state.**
+7. **Resultant-state consolidation may remove obsolete inferential residue from active context.**
+8. **Exploration is not adoption, repetition is not validation, volume is not commitment, and recency is not centrality.**
+9. **Previously consolidated state has persistence but not immunity from revision.**
+10. **Uncertainty, conflict, negation, limits, relations, and scope are part of state and must not be erased for density.**
+11. **Raw omission is not identical to functional failure.**
+12. **Gaps may be reconstructed, reintroduced, corrected, superseded, or rendered non-consequential by state evolution.**
+13. **The primary concern is residual unrepaired consequential loss.**
+14. **A DSU is a semantic checkpoint for continued inference, not an archive of how the checkpoint was reached.**
+15. **Density is subordinate to preservation of consequential semantic structure.**
+16. **A DSU is language-based and designed for direct interpretation by capable LLMs without requiring a mandatory model-specific decoding mechanism.**
+17. **A DSU is intended to be portable across sessions, runtimes, and model contexts without depending on a specific memory backend or vendor-specific hidden state.**
+18. **DeSU is one lightweight prompt-based generation policy; DSUs may also be produced by other systems, including compaction implementations.**
+19. **The purpose of a DSU is to materialize a reusable consequential state from which work can continue.**
+
