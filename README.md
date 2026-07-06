@@ -21,7 +21,7 @@ DSU = what remains in force
 
 ## Prompt
 
-The generator itself is ![](desu.txt)
+The generator itself is ![desu.txt](desu.txt)
 
 ## Why
 
