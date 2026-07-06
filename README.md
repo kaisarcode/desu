@@ -2,428 +2,103 @@
 
 ![DeSU logo](desu.svg)
 
-**DeSU** is a prompt for generating **Dense Semantic Units (DSUs)** for compact, portable, reconstructive LLM context continuity.
+**DeSU** is a prompt for generating **Dense Semantic Units (DSUs)**: compact semantic state records for LLM context reuse.
 
-A DSU is a compact, self-contained natural-language representation of the **active semantic state** of an ongoing reasoning, conversational, or task process. It preserves enough future-relevant structure for a capable model to continue usefully without transporting the full history that produced that state.
+A DSU preserves enough future-relevant active state for useful continuation without transporting the full history that produced it.
 
-In this repository, DeSU is the prompt in `desu.txt`. A DSU is the artifact that prompt produces from input context.
+In this repository:
 
-In compact form:
+* `desu.txt` is the DeSU prompt.
+* A DSU is the artifact produced by that prompt.
 
 ```text
 DeSU(input context) -> DSU
 ```
 
-A DSU is the artifact. DeSU is the prompt that generates it.
-
-## Name
-
-**DeSU** deliberately keeps `DSU` visible in the project name while also reading as *desu*, echoing the Japanese copular expression `です`. The linguistic correspondence is not exact and is not part of the technical definition, but the association is fitting: DeSU attempts to produce a compact statement of what the active semantic state **is** for purposes of future continuation.
-
 ## Core Idea
 
-Conversation history is often much larger than the semantic structure actually needed to continue useful work.
+Conversation, reasoning, and task histories often grow far beyond the semantic state still needed for continuation.
 
-DeSU attempts to preserve the information whose loss would materially change future reasoning or action, such as:
+A long process may contain exploration, repetition, corrections, abandoned branches, examples, resolved questions, and intermediate reasoning. Future work often depends on a much smaller structure: what remains decided, constrained, unresolved, uncertain, excluded, related, or operationally significant.
 
-* active decisions;
+DeSU attempts to consolidate that active structure into a dense one-line record.
+
+The goal is not to preserve source coverage or natural prose. The goal is to preserve information whose loss may change future reasoning, answers, or actions.
+
+A DSU may preserve:
+
+* effective decisions;
 * constraints and prohibitions;
 * critical negation and limits;
-* concepts and relations;
-* unresolved dependencies;
+* entities and relations;
+* objectives;
 * important exclusions;
-* uncertainty and conflict;
-* current objectives;
 * open questions;
+* unresolved dependencies;
+* uncertainty and conflict;
 * effective conclusions and reasoning outcomes;
-* temporally relevant facts;
-* identifiers, paths, URLs, filenames, code symbols, acronyms, and other literals when they matter.
+* semantically relevant temporal facts;
+* exact paths, URLs, IDs, filenames, code symbols, acronyms, and other operational literals.
 
-It should discard information that no longer changes continuation, such as:
+It may remove:
 
-* redundancy;
-* repeated support;
-* rhetoric and politeness;
+* filler and politeness;
+* rhetoric;
+* repetition;
+* redundant support;
+* unnecessary explanation;
 * obsolete exploration;
 * superseded branches;
-* unnecessary source order;
+* resolved residue;
 * reconstructible narrative;
-* low-value examples;
-* duplicated explanations;
-* surface form whose preservation has no future utility.
+* low-impact examples;
+* source order and boundaries that no longer affect meaning.
 
 The result is deliberately lossy.
 
-The goal is not archival fidelity. The goal is to preserve enough semantic structure for reconstructive continuation.
-
 ## Dense Semantic Units
 
-A **Dense Semantic Unit (DSU)** is a practical minimum-sufficient semantic checkpoint.
+A **Dense Semantic Unit** is a compact, self-contained, language-based representation of active semantic state.
 
-It is:
+It is optimized for dense direct interpretation by capable LLMs rather than natural prose.
+
+A DSU may use telegraphic phrasing, compact relations, and minimal grammar when meaning remains clear:
+
+```text
+type:context;protocol:context_only;content:project:X,implementation:C,dependencies:no external,parser:preserve byte offsets,transport:Unix domain sockets
+```
+
+A DSU is:
 
 * compact;
-* self-contained enough for direct contextual use;
-* expressed in natural language;
+* directly interpretable by capable LLMs;
 * future-inference-oriented;
-* aggressively lossy when loss is low-impact;
+* aggressively lossy when consequential meaning survives;
 * model-conditioned and non-canonical;
-* inspectable by humans;
-* directly consumable by sufficiently capable LLMs;
-* portable across sessions and model families;
-* regenerated as the underlying interaction state evolves.
+* inspectable;
+* reusable across sessions;
+* potentially portable across model families;
+* regenerable as interaction evolves.
 
-A DSU is not required to reproduce its source history exactly.
+A DSU is not:
 
-A DSU is not mathematically unique or minimal.
+* an archive;
+* reversible compression;
+* a transcript;
+* a canonical encoding;
+* a formal proof of sufficiency;
+* a hidden-state transfer protocol;
+* a guarantee of exact reconstruction.
 
-A DSU is not a hidden model state transfer protocol.
+Its purpose is useful continuity under transformation.
 
-A DSU is not an archival record.
+## Consolidation
 
-Its purpose is functional continuity under transformation.
+DeSU interprets the complete input semantically rather than shortening fragments independently.
 
-## Reconstructive Continuity
+Related information may be deduplicated, merged, reorganized, or expressed through denser relations. Sentence, paragraph, turn, source, and prior DSU boundaries do not have to survive when semantic reorganization is clearer.
 
-DeSU is built around the hypothesis that useful conversational continuity depends less on preserving history than on preserving enough semantic structure for capable agents to resume the process.
-
-The effective continuation state is distributed across:
-
-* the DSU;
-* the receiving model's priors and capabilities;
-* the human user's memory and pattern recognition;
-* active artifacts and environment;
-* new conversation;
-* correction and clarification;
-* newly introduced evidence.
-
-This means an omitted detail is not automatically a continuity failure.
-
-Some omissions may be reconstructed from preserved constraints, model knowledge, user correction, environmental evidence, contradiction detection, pattern completion, or ordinary continued interaction before they affect behavior.
-
-For that reason, DeSU distinguishes:
-
-* **raw information loss** — information absent from the DSU;
-* **observable functional loss** — a downstream failure caused by the omission;
-* **residual unrepaired loss** — a failure that remains after normal human-model interaction has had an opportunity to repair the gap.
-
-The project treats conversation itself as part of the memory mechanism.
-
-## Lifecycle
-
-The intended lifecycle is:
-
-```text
-conversation or reasoning
-    -> semantic distillation
-    -> DSU
-    -> reload into a capable model
-    -> continued human-LLM interaction
-    -> gap filling, correction, reinterpretation, new evidence, new decisions
-    -> regenerate a new DSU from the evolved state
-```
-
-A simplified form:
-
-```text
-H_t -> DeSU -> DSU_t
-DSU_t + interaction -> evolved state
-evolved state -> DeSU -> DSU_t+1
-```
-
-The next DSU is not expected to be a copy of the previous one.
-
-`DSU_t+1` may:
-
-* recover information absent from `DSU_t`;
-* drop information that lost relevance;
-* reformulate dependencies;
-* incorporate user corrections;
-* preserve newly discovered distinctions;
-* encode new decisions;
-* reflect a different capable model's conceptualization.
-
-DSUs are therefore **plastic**.
-
-The framework values continuity under transformation rather than semantic immobility.
-
-## Interactive Regeneration vs Recursive Self-Copy
-
-DeSU may reconsolidate previous DSUs, but recursive self-copy is not the primary lifecycle.
-
-This is supported:
-
-```text
-DSU_0 -> DeSU -> DSU_1 -> DeSU -> DSU_2
-```
-
-but repeated lossy transformation without new interaction can accumulate drift, erase distinctions, or converge toward generic state because missing information has no external source for recovery.
-
-The preferred lifecycle is:
-
-```text
-DSU_0
-  -> real interaction
-  -> DeSU
-  -> DSU_1
-  -> real interaction
-  -> DeSU
-  -> DSU_2
-```
-
-Interactive regeneration can incorporate new evidence, user correction, environmental state, model inference, and repaired gaps.
-
-A new DSU should represent the evolved interaction state, not mechanically reproduce the previous checkpoint.
-
-## Portability
-
-Portability is central.
-
-A DSU should be directly usable as context by sufficiently capable model families without requiring a specialized:
-
-* parser;
-* decoder;
-* embedding lookup;
-* vector index;
-* retrieval algorithm;
-* graph traversal;
-* reranking stage;
-* model-specific state-transfer protocol.
-
-Natural language is the shared semantic interface.
-
-This can support handoff between local and cloud models, for example:
-
-```text
-local model -> DSU -> cloud model
-cloud model -> evolved interaction -> DSU -> local model
-```
-
-Portability does not imply invariant interpretation.
-
-The same DSU may yield different continuations in different models because interpretation depends on:
-
-* model training;
-* priors;
-* world knowledge;
-* capabilities;
-* active system context;
-* current user input.
-
-The artifact remains usable across capable interpreters even when continuation is not identical.
-
-## Model Dependence
-
-DeSU is executed by a model:
-
-```text
-d = G_M(X)
-```
-
-where:
-
-* `X` is the input context;
-* `M` is the generating model;
-* `G_M` is DeSU's consolidation behavior under that model;
-* `d` is the resulting DSU.
-
-Different models may produce different valid DSUs from the same input.
-
-Variation can affect:
-
-* entity resolution;
-* abstraction level;
-* contradiction handling;
-* what is judged future-relevant;
-* semantic merge quality;
-* inferred dependencies;
-* uncertainty preservation;
-* compression aggressiveness.
-
-DSU production is therefore **generative semantic reconstruction**, not neutral extraction.
-
-This is powerful and risky.
-
-A model may make latent dependencies explicit, but it may also consolidate model-specific assumptions or incorrect inferences.
-
-DeSU must therefore avoid:
-
-* inventing unsupported facts;
-* inventing certainty;
-* merging non-equivalent core ideas;
-* erasing critical negation;
-* silently resolving unsupported contradictions;
-* collapsing distinct entities or scopes.
-
-## What DeSU Optimizes For
-
-DeSU aims to preserve information that changes future answers or actions.
-
-A useful conceptual objective is:
-
-```text
-maximize future semantic utility
-subject to strong reduction
-```
-
-The prompt should jointly interpret the complete input rather than shorten fragments independently.
-
-Source boundaries have no privileged status.
-
-Related information may be:
-
-* deduplicated;
-* merged;
-* reorganized;
-* connected across distant fragments;
-* collapsed into a unified semantic state.
-
-Effective decisions and reasoning outcomes should usually be preserved instead of full reasoning traces.
-
-Strong reduction is desirable, but no fixed ratio defines success.
-
-Aggressive token reduction targets may be used as prompt-level heuristics to discourage conservative restatement, but they are not protocol guarantees or defining DSU properties.
-
-### Semantic Importance Is Not Discursive Prominence
-
-DeSU should not infer semantic importance, commitment, or state change merely from recency, token volume, repetition, discussion length, or surface elaboration.
-
-A compact established decision or constraint may remain more important to future continuation than a long recent discussion of an uncommitted possibility.
-
-For example:
-
-```text
-established state:
-storage:SQLite
-```
-
-followed by extensive discussion of LMDB or RocksDB does not by itself imply that the storage decision changed.
-
-DeSU should distinguish between information that is merely prominent in the discourse and information that actually changes the active semantic state.
-
-In compact form:
-
-```text
-discursive prominence != semantic importance
-```
-
-Information should be weighted by its effect on future answers or actions, including whether it changes:
-
-* active decisions;
-* constraints;
-* effective relations;
-* unresolved dependencies;
-* uncertainty;
-* objectives;
-* expected downstream behavior.
-
-Recent or verbose material should replace or substantially reweight prior state only when the complete input supports a real revision, supersession, correction, or newly effective state.
-
-This is especially important during DSU regeneration. A previous DSU may represent stable semantic state very compactly, while subsequent interaction may occupy many more tokens. The larger textual footprint of new discussion should not by itself displace the compact semantic core.
-
-Conceptually:
-
-```text
-DSU_t + interaction
-```
-
-should not be treated merely as:
-
-```text
-small amount of old text + large amount of new text
-```
-
-but as:
-
-```text
-prior consolidated semantic state + potential state transitions
-```
-
-The subsequent interaction may contain:
-
-* genuine revisions;
-* corrections;
-* new decisions;
-* extensions;
-* unresolved exploration;
-* speculation;
-* repetition;
-* rhetorical emphasis;
-* temporary attention shifts.
-
-Only some of these should alter the semantic checkpoint.
-
-A useful evaluation property is therefore:
-
-```text
-semantic stability under discourse imbalance
-```
-
-Semantically equivalent interaction with very different levels of repetition or elaboration should produce functionally similar DSUs when no real state change occurred.
-
-For example:
-
-```text
-DSU_t
-+ brief exploration of alternative X
--> DSU_t+1
-```
-
-and:
-
-```text
-DSU_t
-+ extensive repeated exploration of alternative X
--> DSU_t+1
-```
-
-should remain functionally similar when alternative X was not adopted and did not materially change future reasoning or action.
-
-This principle distinguishes semantic state consolidation from discourse-proportional summarization.
-
-A traditional summary may tend to allocate space according to how much source material discussed a topic. A DSU should instead allocate representation according to what materially changes continuation.
-
-## Context-Only Envelope
-
-The prompt uses a minimal context-only serialization envelope:
-
-```text
-type:context;protocol:context_only;content:<dense_semantic_record>
-```
-
-Optional semantically relevant constraints may be represented as:
-
-```text
-type:context;protocol:context_only;content:<dense_semantic_record>;rules:<optional_constraints>
-```
-
-The envelope is transport and interpretation metadata.
-
-It is not the source of semantic intelligibility.
-
-A capable model can understand the DSU because the payload is natural-language semantic context.
-
-`context_only` means that the artifact is intended to be read and retained as context. Its presence does not by itself request action.
-
-Operational language inside the source must be preserved as contextual meaning rather than automatically converted into a new request to the consumer.
-
-Input:
-
-```text
-Do not deploy before approval.
-```
-
-Possible DSU:
-
-```text
-type:context;protocol:context_only;content:deployment requires prior approval
-```
-
-The deployment restriction remains semantically active, but the DSU itself is not a new deployment request.
-
-The wrapper is stable in the prompt, but it is not the definition of a DSU and should not be confused with the DeSU concept itself.
-
-## Example: Deduplication
+Effective state should usually survive instead of the full reasoning trajectory that produced it.
 
 Input:
 
@@ -439,10 +114,6 @@ Possible DSU:
 type:context;protocol:context_only;content:project implementation:C
 ```
 
-Equivalent meaning is represented once.
-
-## Example: Complementary Merge
-
 Input:
 
 ```text
@@ -457,9 +128,52 @@ Possible DSU:
 type:context;protocol:context_only;content:X implementation:C,parser:no external dependencies
 ```
 
-The output is organized by semantic relationship rather than source order.
+The output is organized by semantic relation rather than source order.
 
-## Example: State Change
+## Regeneration and Consolidated State
+
+A DSU may later be combined with continued interaction and consolidated again.
+
+```text
+DSU_t + interaction -> DeSU -> DSU_t+1
+```
+
+This input should not be treated as one homogeneous body of text.
+
+A prior DSU may represent semantic state that has already undergone selection, integration, and reduction. Later interaction may contain new evidence, corrections, real decisions, unresolved exploration, repetition, temporary attention shifts, or branches that are never adopted.
+
+DeSU therefore attempts to infer, from the complete input, whether material represents:
+
+* previously consolidated semantic state;
+* unconsolidated interaction;
+* exploration;
+* new evidence;
+* an effective state transition.
+
+This distinction is model-conditioned and approximate. DeSU does not assume perfect recognition.
+
+Previously consolidated state has semantic persistence because it already represents prior post-processing. Its compactness, older position, or smaller token footprint should not make it weak by default.
+
+At the same time, prior consolidation is not proof of truth and does not make state immune to revision.
+
+DeSU should preserve effective state when no supported change is established and revise it when the complete input supports:
+
+* addition;
+* correction;
+* resolution;
+* invalidation;
+* supersession;
+* scope change;
+* new uncertainty;
+* another effective semantic transition.
+
+Recency, repetition, token volume, verbosity, discussion length, and elaboration are not sufficient evidence of importance or state change.
+
+Likewise, prior consolidation status alone is not sufficient evidence of truth.
+
+The intended behavior is semantic persistence without semantic immobility.
+
+## State Change
 
 Input:
 
@@ -475,11 +189,11 @@ Possible DSU:
 type:context;protocol:context_only;content:transport:Unix domain sockets,storage:SQLite
 ```
 
-This result is valid only because the complete input supports interpreting the later statement as a state transition.
+The complete input supports a transition from HTTP to Unix domain sockets.
 
-Without sufficient support, uncertainty or conflict should be preserved.
+If the input only explored Unix domain sockets without adopting them, the prior effective state should not be replaced merely because that exploration was longer or more recent.
 
-## Contradictions and Uncertainty
+## Contradiction and Uncertainty
 
 Conflicting input may represent:
 
@@ -490,369 +204,353 @@ Conflicting input may represent:
 * different entities;
 * one effective state supported by stronger context.
 
-DeSU must not impose a universal rule such as always trusting the last statement.
+DeSU should interpret the complete input jointly.
 
-The complete input should be interpreted jointly.
+It should not use a universal rule such as always trusting the latest statement.
 
-When the evidence does not support a clearer unified state, preserve uncertainty, ambiguity, or conflict.
+When the input does not support a clearer unified interpretation, uncertainty, ambiguity, or conflict should remain explicit.
 
-> Consolidate without inventing unsupported facts or certainty.
-
-## Frequent Regeneration
-
-A central project hypothesis is that frequent semantic-state regeneration may outperform late conventional compaction near context exhaustion.
-
-Long histories accumulate:
-
-* redundancy;
-* obsolete branches;
-* repeated explanations;
-* stale assumptions;
-* contradictory historical residue;
-* competing continuation paths.
-
-Frequent regeneration may keep active state smaller and cleaner while reducing:
-
-* peak context pressure;
-* total tokens processed;
-* latency;
-* generation cost;
-* the size of expensive late compression events.
-
-This is an empirical hypothesis, not an established result.
-
-## Local-First Usage Direction
-
-DeSU itself is the prompt in `desu.txt`.
-
-The surrounding usage model is deliberately small, inspectable, and local-first.
-
-Tooling around the prompt may support operations such as:
+Input:
 
 ```text
-distill
-apply
-save
-load
-model switch
+Deployment may need cloud support.
+Current requirement is local-only deployment.
+It is unclear whether the cloud requirement still applies.
 ```
 
-A practical flow is:
+Possible DSU:
 
 ```text
-user triggers distill
-    -> generate current DSU
-    -> optionally preview or save
-    -> clear or replace local context/KV as appropriate
-    -> re-inject base system context + DSU
-    -> continue
+type:context;protocol:context_only;content:deployment:local-only current requirement,cloud requirement status unresolved
 ```
 
-The project should avoid premature dependence on:
+## Reconstructive Continuity
 
-* event systems;
-* automatic delta logic;
-* vector retrieval;
-* HNSW;
-* knowledge graphs;
-* complex memory orchestration;
-* enterprise-style agent infrastructure.
+A DSU does not need to preserve every recoverable detail.
 
-Those systems may be useful elsewhere, but they are not semantically necessary for the minimal DeSU mechanism.
+Useful continuation depends on more than the checkpoint itself. It may also depend on:
 
-## Task-Based Model Arbitration
+* the receiving model's capabilities and priors;
+* current user input;
+* active artifacts and environment;
+* correction and clarification;
+* later evidence;
+* continued interaction.
 
-A major practical objective is task-based model arbitration.
+An omitted detail is therefore not automatically a continuity failure.
 
-For example:
+A gap may be reconstructed from preserved constraints, model knowledge, user correction, current artifacts, contradiction detection, or later interaction before it affects behavior.
+
+This motivates three different notions of loss:
+
+* **raw information loss** — information absent from the DSU;
+* **observable functional loss** — downstream failure caused by the omission;
+* **residual unrepaired loss** — failure that remains after ordinary interaction had an opportunity to repair the gap.
+
+DeSU is concerned more with useful continuity than textual reconstruction.
+
+## Plasticity
+
+DSUs are checkpoints, not frozen truth objects.
+
+Continued interaction may:
+
+* add evidence;
+* repair omissions;
+* revise decisions;
+* resolve uncertainty;
+* expose new distinctions;
+* remove stale material;
+* reformulate relations.
+
+A later DSU should represent the evolved state.
 
 ```text
-local model
-    -> routine implementation and iteration
-    -> difficult ambiguity or reasoning boundary
-    -> selective cloud model use
-    -> evolve state
-    -> DeSU
-    -> return compact DSU to local model
-    -> continue locally
+DSU_t
++ interaction
++ correction
++ new evidence
+-> DeSU
+-> DSU_t+1
 ```
 
-This may allow constrained local hardware to reuse the outcome of expensive reasoning without repeatedly transporting long histories or paying cloud costs for routine continuation.
+The next DSU is not expected to reproduce the previous one mechanically.
 
-Cross-model handoff is therefore a first-class use case.
+## Interactive Regeneration
 
-## Evaluation
-
-DeSU should be evaluated by practical continuity, error, recoverability, cost, and portability rather than perfect textual fidelity.
-
-### Core comparisons
-
-Useful comparisons include:
-
-* frequent DSU regeneration vs late conventional compaction;
-* full-history continuation vs DSU-only continuation;
-* same-model generation/consumption vs cross-model handoff;
-* recursive DSU self-copy vs interactive regeneration.
-
-### Candidate metrics
-
-Relevant metrics include:
-
-* functional continuity retention;
-* residual unrepaired error;
-* decision divergence;
-* constraint loss;
-* rejected-branch resurrection;
-* invented commitments;
-* gap recovery;
-* state drift;
-* latency;
-* token cost;
-* peak context pressure;
-* total context usage;
-* cross-session continuity;
-* cross-model portability.
-
-### Discourse-Imbalance Tests
-
-Experiments should test whether DeSU remains stable when semantic content is held approximately constant while discursive prominence changes.
-
-Variables may include:
-
-* recency;
-* token volume;
-* repetition count;
-* discussion length;
-* number of examples;
-* degree of elaboration;
-* rhetorical emphasis;
-* position within the context.
-
-For example, compare:
+Repeated DSU-to-DSU transformation without new interaction can accumulate drift because removed distinctions have no external source for recovery.
 
 ```text
-established decision
-+ 50 tokens of uncommitted exploration
+DSU_0 -> DeSU -> DSU_1 -> DeSU -> DSU_2
 ```
 
-against:
+This is possible, but it is not the preferred lifecycle.
+
+Interactive regeneration introduces new evidence and repair opportunities:
 
 ```text
-same established decision
-+ 5000 tokens of semantically equivalent uncommitted exploration
+DSU_0
+-> real interaction
+-> DeSU
+-> DSU_1
+-> real interaction
+-> DeSU
+-> DSU_2
 ```
 
-If no effective state change occurred, the resulting DSUs should remain functionally similar.
+Whether this resists degradation better than recursive self-copy is a project hypothesis, not an established result.
 
-These tests can measure whether verbose recent material improperly displaces compact established state.
+## Portability
 
-### Gap-injection tests
+A DSU should be directly usable by sufficiently capable LLMs without requiring a specialized:
 
-Experiments should separately remove:
+* parser;
+* decoder;
+* embedding lookup;
+* vector index;
+* retrieval algorithm;
+* graph traversal;
+* reranking stage;
+* model-specific state-transfer protocol.
 
-* reconstructible detail;
-* critical constraints;
-* decisions;
-* examples;
-* uncertainty.
+Dense language is the shared interface.
 
-Then observe whether omissions:
+Portability does not imply invariant interpretation.
 
-* are silently reconstructed;
-* are corrected through interaction;
-* remain harmless;
-* cause observable downstream failure;
-* remain as residual unrepaired error.
+Different models may continue differently from the same DSU because interpretation depends on model training, capabilities, world knowledge, active system context, and current input.
 
-### Behavioral evaluation
+The practical claim is weaker: a DSU may remain directly usable across capable sessions and model families without requiring a model-specific decoding mechanism.
 
-Full-history and DSU-only continuation should be judged primarily by downstream behavior and decisions, not textual similarity.
+## Model Dependence
 
-A continuation can differ in wording while preserving functional state.
+DeSU is executed by a model, so DSU generation is model-conditioned.
 
-## Working Hypotheses
+Different models may differ in:
 
-DeSU motivates several testable hypotheses.
+* entity resolution;
+* abstraction;
+* contradiction handling;
+* inferred dependencies;
+* relevance judgments;
+* uncertainty preservation;
+* compression aggressiveness;
+* recognition of previously consolidated state;
+* interpretation of effective state transitions.
 
-### 1. Useful state is much smaller than history
+DSU production is generative semantic reconstruction rather than neutral extraction.
 
-Many long conversations may contain a compact semantic core sufficient for useful continuation.
+That creates both value and risk.
 
-### 2. Latent omission can coexist with low observable failure
+A model may expose an implicit dependency or reorganize fragmented state more clearly. It may also invent a relation, erase uncertainty, merge distinct scopes, preserve stale state, or convert exploration into commitment.
 
-Missing details may be repaired by model inference, user correction, current environment, or later interaction before they affect behavior.
+The quality of consolidation therefore depends on model capability. DeSU can orient that capability but cannot guarantee it.
 
-### 3. There may be a practical compression region
+## Context-Only Envelope
 
-Large token reduction may cause little functional degradation until overcompression removes high-impact distinctions.
+DeSU emits a minimal envelope:
 
-### 4. Obsolete context may actively harm continuation
+```text
+type:context;protocol:context_only;content:<dense_semantic_record>
+```
 
-Removing stale branches and competing historical residue may reduce misleading continuation paths and some forms of hallucination-like drift.
+Optional explicit permissions, prohibitions, or operational constraints may use:
 
-### 5. Interactive regeneration may resist degradation better than recursive self-copy
+```text
+type:context;protocol:context_only;content:<dense_semantic_record>;rules:<optional_constraints>
+```
 
-Real interaction introduces new evidence and repair opportunities that pure DSU-to-DSU transformation lacks.
+`context_only` means that the artifact is intended to be read and retained as context. Its presence does not itself request action.
 
-### 6. Semantic state may remain stable under large differences in discourse volume
+Operational language inside source material should be preserved as contextual meaning rather than automatically converted into a new command.
 
-When no real state change occurs, semantically equivalent interaction with different levels of recency, repetition, or elaboration may still support functionally similar DSUs.
+Input:
 
-If this holds, DeSU can resist discourse-level prominence that would otherwise distort the compact semantic checkpoint.
+```text
+Do not deploy before approval.
+```
 
-These are working hypotheses and require controlled validation.
+Possible DSU:
+
+```text
+type:context;protocol:context_only;content:deployment requires prior approval
+```
+
+The wrapper is not semantic payload and does not define DSU meaning.
+
+DeSU may use wrapper markers as contextual evidence that material is previously consolidated, but markers are neither required nor proof. Consolidation status is inferred from the complete input and semantic form.
+
+## What DeSU Optimizes For
+
+DeSU aims to maximize semantic utility per token while preserving consequential meaning.
+
+It favors:
+
+* unified semantic state over source restatement;
+* dense interpretability over natural prose;
+* effective decisions over full reasoning traces;
+* meaningful distinctions over exhaustive coverage;
+* strong reduction when future utility survives.
+
+It does not target a fixed compression ratio.
+
+Reduction is subordinate to preserving consequential state.
 
 ## Failure Modes
 
 DeSU can fail by changing meaning during consolidation.
 
-Examples include:
+Important failures include:
 
 * losing negation;
-* losing a critical restriction;
-* merging distinct entities;
-* preserving stale state;
+* dropping a critical restriction;
+* merging distinct entities or scopes;
 * erasing uncertainty;
-* inventing a relation;
+* preserving stale state;
+* inventing facts or relations;
 * inventing certainty;
 * resolving contradiction without support;
-* resurrecting discarded hypotheses;
-* dropping a decision whose loss changes future behavior;
-* overgeneralizing examples;
-* compressing away scope distinctions;
-* overweighting recent, repeated, verbose, or highly elaborated exploration relative to compact established state;
-* interpreting discussion volume as commitment, adoption, or state change.
+* resurrecting rejected branches;
+* dropping a high-impact decision;
+* confusing exploration with adoption;
+* overweighting recent or verbose unconsolidated interaction;
+* treating prior consolidated state as unquestionable truth;
+* overcompressing until consequential distinctions disappear.
 
-Recursive reuse can also degrade information when an earlier DSU removed distinctions that later become important.
+These risks follow directly from model-conditioned semantic reconstruction.
 
-Protocol failures may include:
+## Possible Uses
 
-* missing or duplicated envelope fields;
-* copying wrapper metadata into semantic payload;
-* treating contextual operational language as a new request;
-* confusing transport metadata with DSU meaning.
-
-## Relationship to Retrieval Systems
-
-DeSU is not a retrieval protocol.
-
-A retrieval system may store DSUs with:
-
-* embeddings;
-* timestamps;
-* identifiers;
-* scope;
-* provenance;
-* ranking metadata.
-
-It may retrieve several DSUs and consolidate them again.
-
-Those are external architectural choices.
-
-Retrieval, filtering, ranking, chunk selection, graph traversal, and prompt assembly are not semantically required for the minimal DeSU mechanism.
-
-A DSU should be self-contained enough that a capable recipient does not need separate heuristics to decide which internal fragments to retrieve or how to merge them before reasoning.
-
-## Relationship to Agent Memory
-
-DeSU can be used inside an agent-memory architecture.
+DeSU itself is only the prompt in `desu.txt`.
 
 Possible uses include:
 
+* compact conversation checkpoints;
+* cross-session continuation;
 * project state reuse;
 * task handoff;
-* long-running agent continuity;
-* conversation memory;
 * model switching;
-* compact checkpoints;
-* cross-session state transfer.
+* local/cloud model handoff;
+* semantic reset after long exploration;
+* reflective re-expansion;
+* use inside larger memory or retrieval systems.
 
-That is a use case, not the complete definition of DeSU.
+These uses are external integration choices. They are not implemented by the prompt itself.
 
-Whether an external agent acts depends on mechanisms outside the mere presence of a DSU.
+## Relationship to Retrieval and Agent Memory
 
-## Theoretical Connections
+DeSU is not a retrieval protocol or complete agent-memory architecture.
 
-The project has partial conceptual connections to areas such as:
+External systems may store DSUs with embeddings, timestamps, identifiers, scope, provenance, or ranking metadata. They may retrieve several DSUs and consolidate them again.
 
-* sufficient statistics;
-* Information Bottleneck;
-* predictive or causal state ideas;
-* belief-state compression;
-* state abstraction;
-* behavioral equivalence;
-* recurrent textual memory;
-* reconstructive memory.
+Those mechanisms are optional.
 
-DeSU should not be claimed as identical to any of them.
+The minimal DeSU mechanism remains:
 
-It does not provide a mathematically canonical minimal encoding or a formal proof of sufficiency.
+```text
+input context
+-> DeSU
+-> DSU
+-> direct contextual reuse
+```
 
-Its distinctive practical combination is a compact, inspectable, aggressively lossy, future-inference-oriented, natural-language, model-conditioned, directly consumable, cross-session and cross-model portable checkpoint regenerated through live human-LLM interaction.
+## Evaluation Ideas
 
-## What DeSU Is Not
+The project is suitable for behavioral evaluation rather than textual similarity alone.
 
-DeSU is not:
+Possible comparisons include:
 
-* reversible compression;
-* a traditional summary;
-* an archival format;
-* a formal DSL;
-* a compiler or parser;
-* a retrieval engine;
-* a vector database;
-* a metadata store;
-* an event log;
-* a hidden-state transfer protocol;
-* a guarantee of deterministic reproduction;
-* a guarantee of exact reconstruction;
-* a requirement for recursive self-copy stability;
-* an instruction envelope for its consumer.
+* full-history continuation vs DSU-only continuation;
+* frequent regeneration vs late compaction;
+* same-model vs cross-model handoff;
+* recursive self-copy vs interactive regeneration.
+
+Possible measures include:
+
+* functional continuity;
+* decision retention;
+* constraint retention;
+* critical negation preservation;
+* uncertainty preservation;
+* decision divergence;
+* rejected-branch resurrection;
+* invented commitments;
+* state drift;
+* gap recovery;
+* residual unrepaired error;
+* token cost;
+* latency;
+* peak context pressure;
+* cross-session continuity;
+* cross-model usability.
+
+### Discourse-Imbalance Tests
+
+A specific test should vary textual prominence while holding semantic state approximately constant.
+
+Compare:
+
+```text
+established decision
++ brief uncommitted exploration of alternative X
+```
+
+with:
+
+```text
+same established decision
++ extensive repeated uncommitted exploration of alternative X
+```
+
+If no effective state change occurred, resulting DSUs should remain functionally similar.
+
+This tests whether DeSU preserves compact consolidated state instead of weighting material by recency or volume.
+
+### Gap Tests
+
+Different classes of information can be removed before continuation:
+
+* reconstructible detail;
+* critical constraints;
+* decisions;
+* uncertainty;
+* operational literals.
+
+The useful distinction is whether omissions are repaired before impact or remain as residual functional errors.
+
+## Working Hypotheses
+
+The project currently motivates several hypotheses:
+
+1. Useful active state is often much smaller than accumulated history.
+2. Large textual loss may coexist with low observable functional loss when gaps are repaired before impact.
+3. There may be a broad practical compression region before consequential distinctions disappear.
+4. Removing obsolete or competing history may sometimes improve continuation.
+5. Interactive regeneration may resist degradation better than recursive self-copy.
+6. Consolidated state may remain stable under large differences in recency, repetition, and discourse volume when no effective state change occurred.
+7. Dense DSUs may remain practically usable across sessions and capable model families.
+
+These are hypotheses, not guarantees.
+
+## Name
+
+**DeSU** keeps `DSU` visible in the project name while also reading as *desu*, echoing the Japanese copular expression `です`.
+
+The linguistic correspondence is informal and not part of the technical definition. The association is fitting because DeSU attempts to produce a compact statement of what the active semantic state is for future continuation.
 
 ## Terminology
 
-The terminology used here is:
-
-```text
-DSU
-    the conceptual semantic-state artifact
-
-DeSU
-    the prompt for distilling DSUs from active context
-
-distill
-    produce a DSU from active context
-
-apply / rehydrate
-    install a DSU into active model context
-
-portable semantic state
-    a property of a usable DSU
-
-frequent regeneration
-    a lifecycle strategy
-```
-
-This repository is `desu.txt`, the DeSU prompt, plus documentation for the DSU concept it describes.
-
-DeSU asks a practical question:
-
-> What is the smallest practical semantic state that still lets reconstructive human-model systems continue useful work?
+* **DSU** — the semantic-state artifact.
+* **DeSU** — the prompt in `desu.txt` that generates DSUs.
+* **distill** — generate a DSU from input context.
+* **regenerate** — produce a new DSU from evolved state.
+* **apply / rehydrate** — load a DSU into active model context.
+* **portable semantic state** — practical direct usability across capable sessions or models.
 
 ## Status
 
-DeSU is an active research prompt and concept document.
+DeSU is an experimental prompt and concept project.
 
-Preliminary practical observations suggest that capable models can often continue productively from aggressively compact semantic checkpoints, including across fresh sessions and different model families.
-
-These observations are promising but not universal results.
-
-The project explicitly distinguishes:
-
-* hypotheses;
-* preliminary practical evidence;
-* controlled experimental results;
-* established claims.
+Its behavior depends on the generating and receiving models. Current ideas around reconstruction, cross-model portability, discourse-imbalance resistance, semantic denoising, and frequent regeneration require further practical and controlled evaluation.
 
 ## License
 
