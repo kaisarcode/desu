@@ -19,6 +19,10 @@ history = what happened
 DSU = what remains in force
 ```
 
+## Prompt
+
+The generator itself is ![](desu.txt)
+
 ## Why
 
 Long interactions accumulate more than current state.
