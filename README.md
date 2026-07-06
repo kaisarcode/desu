@@ -428,16 +428,6 @@ DeSU is not:
 
 It is a prompt for generating dense contextual representations of consequential resultant state.
 
-## Files
-
-* `desu.txt` — the DeSU prompt.
-* `desu.svg` — project logo.
-* A DSU is the artifact produced by DeSU.
-
-```text
-DeSU(input context) -> DSU
-```
-
 ## Possible Uses
 
 Possible uses include:
